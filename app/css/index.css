@@ -1,0 +1,106 @@
+*{
+	margin:0;
+	padding:0;
+}
+body{
+	/*-webkit-app-region: drag;*/
+	background-color: #67b1d6;
+	font-family: "Roboto",'Microsoft Yahei';
+}
+ul, li{
+	list-style: none;
+}
+::-webkit-scrollbar-thumb{
+	background-color: #a9a8ad;
+	border-radius: 5px;
+	width:5px;
+}
+::-webkit-scrollbar{
+	/*background-color: #000;*/
+	border-radius: 5px;
+	width:5px;
+}
+.head-bar{
+	background-color: #538eac;
+	overflow: auto;
+	height:45px;
+	-webkit-app-region: drag;
+}
+.min,
+.close {
+    cursor: pointer;
+    display: inline-block;
+    height: 32px;
+    position: absolute;
+    text-indent: -10000px;
+    top: 6px;
+    width: 32px;
+    z-index: 100;
+}
+.close:hover{
+	cursor:pointer;
+}
+.min {
+    background: transparent url('../img/min.png') no-repeat 4px 4px;
+    background-size: 24px 24px;
+    right: 38px;
+    -webkit-app-region: no-drag;
+}
+
+.close {
+    background: transparent url('../img/close.png') no-repeat 4px 4px;
+    background-size: 24px 24px;
+    right: 6px;
+    -webkit-app-region: no-drag;
+}
+.app-name{
+	margin-top: 20px;
+	color:#fff;
+	text-align: center;
+}
+.wrap{
+	background-color: #e5eff4;
+}
+
+.control-bar{
+	display:flex;
+	padding:0 4px;
+	height:50px;
+	line-height: 50px;
+	background-color: #fafbfc;
+}
+.control-bar li{
+	flex:1;
+	justify-content:space-between;
+	cursor: pointer;
+}
+
+.list{
+	padding: 0 20px 10px;
+	height: 420px;
+	overflow-y:scroll;
+}
+.list .item{
+	height: 45px;
+	line-height: 45px;
+	border-bottom: 1px solid #A8A8A8
+}
+.item .last{
+	margin-bottom: 20px;
+}
+.addItem{
+	color:#f6846a;
+	text-shadow: 0px 1px 1px #333;
+	position: absolute;
+	right:10px;
+	bottom:10px;
+}
+i.icon.green{
+	color:#a6d850 !important;
+}
+.shadow{
+	box-shadow: 0px 1px 6px #333;
+}
+.circle.thin{
+	cursor: pointer;
+}
