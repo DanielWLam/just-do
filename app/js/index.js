@@ -1,15 +1,20 @@
 // Add your index.js code in this file
 'use strict';
 const electron = require('electron');
-var fs = require('fs')
-const {ipcRenderer} = electron;
+let fs = require('fs')
+const { ipcRenderer } = electron;
 
-var closeEl = document.querySelector('.close');
-var wrap = document.querySelector('.wrap');
-var controlbar = document.querySelector('.control-bar');
-var list = document.querySelector('.list');
-var tabChooseBtn = document.querySelectorAll('.tabChoose');
-var todoData = '';
+let closeEl = document.querySelector('.close');
+let wrap = document.querySelector('.wrap');
+let controlbar = document.querySelector('.control-bar');
+let list = document.querySelector('.list');
+let tabChooseBtn = document.querySelectorAll('.tabChoose');
+let addItem = document.querySelector('.addItem');
+let addBg = document.querySelector('.add-bg');
+let addArea = addBg.querySelector('.add-area');
+let todoData = '';
+
+
 
 fs.readFile('./app/data.json',{encoding:'UTF-8'},function(err,data){
 		if(err) throw err;
@@ -18,9 +23,9 @@ fs.readFile('./app/data.json',{encoding:'UTF-8'},function(err,data){
 })
 
 function renderList() {
-    var _html = ''
+    let _html = ''
     for (let i = 0, len = todoData.length; i < len; i++) {
-        var curArr = todoData[i];
+        let curArr = todoData[i];
         switch (curArr.priority) {
             case 'A':
                 _html += '<li class="item priA fadeInDown animated"><i class="circle thin icon red"></i>' + curArr.name + '</li>';
@@ -43,10 +48,10 @@ closeEl.addEventListener('click',function(){
 	ipcRenderer.send('close-main-window');
 })
 controlbar.addEventListener('click',function(e){
-	var target = null;
-	var iconNode = null;
-	var allI = controlbar.querySelectorAll('i');
-	var allItem = list.querySelectorAll('.item');
+	let target = null;
+	let iconNode = null;
+	let allI = controlbar.querySelectorAll('i');
+	let allItem = list.querySelectorAll('.item');
 
 	if(e.target.className=='tabChoose'){
 		target = e.target;
@@ -56,23 +61,23 @@ controlbar.addEventListener('click',function(e){
 	}
 	iconNode = target.querySelector('.circle');
 	if(iconNode.className.indexOf('thin')>-1){
-		var firstClick = true;
-		for(var i=0,len=allI.length;i<len;i++){
+		let firstClick = true;
+		for(let i=0,len=allI.length;i<len;i++){
 			if(allI[i].className.indexOf('thin')<=-1){
 				allI[i].className += ' thin';
 			}
 		}
 		iconNode.className = iconNode.className.replace('thin','');
 	}else{
-		var firstClick = false;
-		for(var i=0,len=allI.length;i<len;i++){
+		let firstClick = false;
+		for(let i=0,len=allI.length;i<len;i++){
 			if(allI[i].className.indexOf('thin')<=-1){
 				allI[i].className += ' thin';
 			}
 		}
 	}
 
-	var priority = target.id;
+	let priority = target.id;
 	if(firstClick){
 		for(let i=0,len=allItem.length;i<len;i++){
 			allItem[i].style.display='none';
@@ -88,25 +93,28 @@ controlbar.addEventListener('click',function(e){
 },false)
 
 list.addEventListener('click',function(e){
-	var index = getIndex(list,'.circle',e.target);
+	let index = getIndex(list,'.circle',e.target);
 	if(e.target.className.indexOf('circle')>-1){
 		e.target.className = e.target.className.replace('thin','');
 	}
-	todoData.splice(index,1);
-	fs.writeFile('./app/data.json',JSON.stringify(todoData),function(err,data){
-		if(err) throw err;
-		renderList();
-	})
+	
+	if(index>-1){
+		todoData.splice(index,1);
+		fs.writeFile('./app/data.json',JSON.stringify(todoData),function(err,data){
+			if(err) throw err;
+			renderList();
+		})
+	}
 },false)
 
-var getIndex = (parent,ele,target) => {
+let getIndex = (parent,ele,target) => {
 	if(!parent){
 		var elements = document.querySelectorAll(ele);
 	}else{
 		var elements = parent.querySelectorAll(ele);
 	}
 	
-	for(var i=0,len=elements.length;i<len;i++){
+	for(let i=0,len=elements.length;i<len;i++){
 		if(elements[i]==target){
 			return i;
 		}
@@ -114,7 +122,68 @@ var getIndex = (parent,ele,target) => {
 	return -1;
 }
 
+addItem.addEventListener('click',function(){
+	addItem.className += ' slideOutDown';
+	addArea.className += ' slideInUp';
+	addBg.className = addBg.className.replace('fn-hide','');
+},false);
+
+
+addArea.addEventListener('click',function(e){
+	let addAreaCircle = addArea.querySelectorAll('.circle');
+	let input = addArea.querySelector('input');
+	let selectedPri = null;
+	if(e.target.className.indexOf('circle')>-1){
+		for(let i=0,len=addAreaCircle.length;i<len;i++){
+			if(addAreaCircle[i].className.indexOf('thin')==-1){
+				addAreaCircle[i].className += ' thin';				
+			}
+			addAreaCircle[i].className = addAreaCircle[i].className.replace('selected','');
+		}
+		e.target.className = e.target.className.replace('thin','');
+		e.target.className += ' selected';
+	}
+	if(e.target.className.indexOf('button')>-1){
+		for(var i=0,len=addAreaCircle.length;i<len;i++){
+			if(addAreaCircle[i].className.indexOf('thin')==-1){
+				break;
+			}
+		}
+		if(i>=len){
+			alert('要选择任务的优先级噢！');
+		}else{
+			if(input.value.trim()===''){
+				alert('任务内容不能为空');
+			}else{
+				selectedPri = addArea.querySelector('.selected').parentNode.className;
+				todoData.push({"priority":selectedPri,"name":input.value.trim()});
+				
+				todoData.sort(keysort('priority'));
+			
+				fs.writeFile('./app/data.json',JSON.stringify(todoData),function(err,data){
+					if(err) throw err;
+					for(let i=0,len=addAreaCircle.length;i<len;i++){
+						addAreaCircle[i].className = addAreaCircle[i].className.replace('selected','');
+						if(addAreaCircle[i].className.indexOf('thin')==-1){
+							addAreaCircle[i].className += ' thin';				
+						}
+					}
+					input.value='';
+					addBg.className += ' fn-hide';
+					renderList();
+				})
+			}
+		}
+	}
+});
+
+function keysort(key,desc){
+	return function(a,b){
+		return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+	}
+}
+
 ipcRenderer.on('global-shortcut',function(event,message){
-	var event = new MouseEvent('click');
+	let event = new MouseEvent('click');
     soundButtons[message].dispatchEvent(event);
 })

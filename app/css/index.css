@@ -20,6 +20,9 @@ ul, li{
 	border-radius: 5px;
 	width:5px;
 }
+.fn-hide{
+	display:none;
+}
 .head-bar{
 	background-color: #538eac;
 	overflow: auto;
@@ -99,8 +102,46 @@ i.icon.green{
 	color:#a6d850 !important;
 }
 .shadow{
-	box-shadow: 0px 1px 6px #333;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2),0 1px 1px rgba(0,0,0,0.1)
 }
 .circle.thin{
 	cursor: pointer;
+}
+.add-bg{
+	content: '';
+	position: absolute;
+	z-index: 2;
+	background-color: rgba(0,0,0,0.4);
+	width:442px;
+	height:700px;
+	top:0;
+	left:0;
+}
+.add-area{
+	width:400px;
+	height:200px;
+	background-color: #fff;
+	border-radius: 5px;
+	border:1px solid rgba(0,0,0,0.1);
+	position: absolute;
+	left:221px;
+	top:350px;
+	margin-top: -100px;
+	margin-left: -200px;
+	box-sizing: border-box;
+	padding:20px;
+	text-align: center;
+	z-index: 999;
+}
+.add-area ul{
+	display: flex;
+}
+.add-area ul li{
+	flex:1;
+	justify-content:space-around;
+	text-align: center;
+}
+.add-area .input{
+	width:300px;
+	margin:30px auto;
 }
