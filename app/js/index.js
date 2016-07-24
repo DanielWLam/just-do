@@ -102,7 +102,7 @@ list.addEventListener('click',function(e){
 		todoData.splice(index,1);
 		fs.writeFile('./app/data.json',JSON.stringify(todoData),function(err,data){
 			if(err) throw err;
-			renderList();
+			list.removeChild(e.target.parentNode);
 		})
 	}
 },false)
@@ -156,6 +156,11 @@ addArea.addEventListener('click',function(e){
 				alert('任务内容不能为空');
 			}else{
 				selectedPri = addArea.querySelector('.selected').parentNode.className;
+
+				var lastIndex = getObjectIndexInArray(todoData,'priority',selectedPri);
+				console.log(lastIndex)
+				return;
+
 				todoData.push({"priority":selectedPri,"name":input.value.trim()});
 				
 				todoData.sort(keysort('priority'));
@@ -170,12 +175,31 @@ addArea.addEventListener('click',function(e){
 					}
 					input.value='';
 					addBg.className += ' fn-hide';
-					renderList();
+					var tmpNode = document.createElement('li');
+					tmpNode.className = 'item fadeInDown animated selectedPri';+selectedPri
+					tmpNode.innerHTML = '<i class="circle thin icon green"></i>' + input.value.trim();
+					li.insertBefore()
 				})
 			}
 		}
 	}
 });
+
+function getObjectIndexInArray(arr,key,value){
+	let count = 0;
+	console.log(arr,key,value)
+	for(var i=0,k=0,len=arr.length;i<len;i++){
+		let tmpObj = arr[i];
+		if(tmpObj[key]&&tmpObj[key]!=value){
+			k++;
+		}
+		if(tmpObj[key]&&tmpObj[key]==value){
+			count++;
+		}
+	}
+	console.log(count,k)
+	return count+k>=arr.length ? -1 : count+k;
+}
 
 function keysort(key,desc){
 	return function(a,b){
