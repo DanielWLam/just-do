@@ -18,7 +18,7 @@ let todoData = '';
 
 
 
-fs.readFile('./app/data.json', {
+fs.readFile('./resources/app.asar/app/data.json', {
 	encoding: 'UTF-8'
 }, function(err, data) {
 	if (err) throw err;
@@ -104,7 +104,7 @@ list.addEventListener('click', function(e) {
 
 	if (index > -1) {
 		todoData.splice(index, 1);
-		fs.writeFile('./app/data.json', JSON.stringify(todoData), function(err, data) {
+		fs.writeFile('./resources/app.asar/app/data.json', JSON.stringify(todoData), function(err, data) {
 			if (err) throw err;
 			list.removeChild(e.target.parentNode);
 		})
@@ -170,7 +170,7 @@ addArea.addEventListener('click', function(e) {
 
 				todoData.sort(keysort('priority'));
 
-				fs.writeFile('./app/data.json', JSON.stringify(todoData), function(err, data) {
+				fs.writeFile('./resources/app.asar/app/data.json', JSON.stringify(todoData), function(err, data) {
 					if (err) throw err;
 					for (let i = 0, len = addAreaCircle.length; i < len; i++) {
 						addAreaCircle[i].className = addAreaCircle[i].className.replace('selected', '');
