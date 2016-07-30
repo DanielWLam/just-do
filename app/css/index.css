@@ -95,8 +95,15 @@ ul, li{
 	color:#f6846a;
 	text-shadow: 0px 1px 1px #333;
 	position: absolute;
-	right:10px;
+	right:188px;
 	bottom:10px;
+	cursor:pointer;
+}
+.addItem:hover{
+	color:#ff886e;
+}
+.addItem:active{
+	color:#cc6d58;
 }
 i.icon.green{
 	color:#a6d850 !important;
@@ -144,4 +151,17 @@ i.icon.green{
 .add-area .input{
 	width:300px;
 	margin:30px auto;
+}
+.close-add{
+	position: absolute;
+	right:0;
+	top:5px;
+	color:#999;
+	cursor:pointer;
+}
+.close-add:hover{
+	color:#777;
+}
+.close-add:active{
+	color:#666;
 }

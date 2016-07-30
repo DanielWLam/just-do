@@ -6,6 +6,7 @@ const {
 	ipcRenderer
 } = electron;
 
+let minEl = document.querySelector('.min');
 let closeEl = document.querySelector('.close');
 let wrap = document.querySelector('.wrap');
 let controlbar = document.querySelector('.control-bar');
@@ -14,6 +15,7 @@ let tabChooseBtn = document.querySelectorAll('.tabChoose');
 let addItem = document.querySelector('.addItem');
 let addBg = document.querySelector('.add-bg');
 let addArea = addBg.querySelector('.add-area');
+let closeAddArea = addBg.querySelector('.close-add');
 let todoData = '';
 
 
@@ -50,7 +52,10 @@ function renderList() {
 
 closeEl.addEventListener('click', function() {
 	ipcRenderer.send('close-main-window');
-})
+});
+minEl.addEventListener('click',function(){
+	ipcRenderer.send('minimize-main-window');
+});
 controlbar.addEventListener('click', function(e) {
 	let target = null;
 	let iconNode = null;
@@ -127,8 +132,6 @@ let getIndex = (parent, ele, target) => {
 }
 
 addItem.addEventListener('click', function() {
-	addItem.className += ' slideOutDown';
-	addArea.className += ' slideInUp';
 	addBg.className = addBg.className.replace('fn-hide', '');
 }, false);
 
@@ -192,6 +195,13 @@ addArea.addEventListener('click', function(e) {
 	}
 });
 
+closeAddArea.addEventListener('click',function(){
+	addBg.className += ' fn-hide';
+	let addAreaCircle = addArea.querySelectorAll('.circle');
+	let input = addArea.querySelector('input');
+	input.value = '';
+})
+
 let priColorMap = {
 	'A':'red',
 	'B':'yellow',
@@ -239,8 +249,3 @@ function keysort(key, desc) {
 		return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
 	}
 }
-
-ipcRenderer.on('global-shortcut', function(event, message) {
-	let event = new MouseEvent('click');
-	soundButtons[message].dispatchEvent(event);
-})

@@ -21,4 +21,8 @@ app.on('ready', function() {
 
 ipcMain.on('close-main-window',function(){
     app.quit();
+});
+
+ipcMain.on('minimize-main-window',function(){
+	mainWindow.minimize();
 })
