@@ -23,7 +23,7 @@ let historyList = document.querySelector('.history-list');
 
 
 
-fs.readFile('./app/data.json', {
+fs.readFile('./resources/app/app/data.json', {
 	encoding: 'UTF-8'
 }, function(err, data) {
 	if (err) throw err;
@@ -31,7 +31,7 @@ fs.readFile('./app/data.json', {
 	renderList();
 });
 
-fs.readFile('./app/history.json',{
+fs.readFile('./resources/app/app/history.json',{
 	encoding:'UTF-8'
 },function(err,data){
 	if(err){
@@ -123,9 +123,9 @@ list.addEventListener('click', function(e) {
 		var doneItem = todoData.splice(index, 1)[0];
 		doneItem.timestamp = new Date();
 		historyData.push(doneItem);
-		fs.writeFile('./app/data.json', JSON.stringify(todoData), function(err, data) {
+		fs.writeFile('./resources/app/app/data.json', JSON.stringify(todoData), function(err, data) {
 			if (err) throw err;
-			fs.writeFile('./app/history.json',JSON.stringify(historyData),function(err,data){
+			fs.writeFile('./resources/app/app/history.json',JSON.stringify(historyData),function(err,data){
 				if(err){
 					throw err;
 				}
@@ -192,7 +192,7 @@ addArea.addEventListener('click', function(e) {
 
 				todoData.sort(keysort('priority'));
 
-				fs.writeFile('./app/data.json', JSON.stringify(todoData), function(err, data) {
+				fs.writeFile('./resources/app/app/data.json', JSON.stringify(todoData), function(err, data) {
 					if (err) throw err;
 					for (let i = 0, len = addAreaCircle.length; i < len; i++) {
 						addAreaCircle[i].className = addAreaCircle[i].className.replace('selected', '');
