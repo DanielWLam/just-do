@@ -18,6 +18,8 @@ let addArea = addBg.querySelector('.add-area');
 let closeAddArea = addBg.querySelector('.close-add');
 let todoData = '';
 let historyData = '';
+let historyBtn = document.querySelector('.history');
+let historyList = document.querySelector('.history-list');
 
 
 
@@ -265,4 +267,69 @@ function keysort(key, desc) {
 	return function(a, b) {
 		return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
 	}
+}
+
+
+historyBtn.addEventListener('click',function(){
+	historyList.style.left = 0;
+	renderHistory()
+})
+
+document.body.addEventListener('click',function(e){
+	if(e.target.offsetParent.className != 'history-list' && e.target.className != 'history-list'){
+		if(historyList.offsetLeft===0){
+			historyList.style.left = '-360px'
+		}
+	}
+})
+
+function renderHistory() {
+	let _html = ''
+	for (let i = 0, len = historyData.length; i < len; i++) {
+		let curArr = historyData[i];
+		switch (curArr.priority) {
+			case 'A':
+				_html += '<li><i class="circle icon red"></i><span class="task-name">'+curArr.name+'</span><span class="finished-time">'+timestampTransform(curArr.timestamp)+'</span></li>';
+				break;
+			case 'B':
+				_html += '<li><i class="circle icon yellow"></i><span class="task-name">'+curArr.name+'</span><span class="finished-time">'+timestampTransform(curArr.timestamp)+'</span></li>';
+				break;
+			case 'C':
+				_html += '<li><i class="circle icon blue"></i><span class="task-name">'+curArr.name+'</span><span class="finished-time">'+timestampTransform(curArr.timestamp)+'</span></li>';
+				break;
+			case 'D':
+				_html += '<li><i class="circle icon green"></i><span class="task-name">'+curArr.name+'</span><span class="finished-time">'+timestampTransform(curArr.timestamp)+'</span></li>';
+		}
+	}
+	historyList.querySelector('ul').innerHTML = _html;
+}
+
+function timestampTransform(timestamp){
+	var timestampDate = new Date(timestamp);
+	var monthMap = {
+		0:'01',
+		1:'02',
+		2:'03',
+		3:'04',
+		4:'05',
+		5:'06',
+		6:'07',
+		7:'08',
+		8:'09',
+		9:'10',
+		10:'11',
+		11:'12'
+	}
+	var year = timestampDate.getFullYear();
+	var month = monthMap[timestampDate.getMonth()];
+	var date = timestampDate.getDate()+'';
+	var hour = timestampDate.getHours()+'';
+	var minute = timestampDate.getMinutes()+'';
+	var second = timestampDate.getSeconds()+'';
+
+	return year+'-'+month+'-'+addTimePreZero(date)+' '+addTimePreZero(hour)+':'+addTimePreZero(minute)+':'+addTimePreZero(second);
+}
+
+function addTimePreZero(str){
+	return str.length==1 ? 0 + str : str;
 }

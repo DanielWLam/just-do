@@ -10,13 +10,13 @@ var mainWindow = null;
 app.on('ready', function() {
     mainWindow = new BrowserWindow({
         height: 700,
-        width: 1000,
+        width: 442,
         frame:false,
         resizable:false
     });
 
     mainWindow.loadURL('file://' + __dirname + '/app/index.html');
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 });
 
 ipcMain.on('close-main-window',function(){
