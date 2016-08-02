@@ -17,15 +17,25 @@ let addBg = document.querySelector('.add-bg');
 let addArea = addBg.querySelector('.add-area');
 let closeAddArea = addBg.querySelector('.close-add');
 let todoData = '';
+let historyData = '';
 
 
 
-fs.readFile('./resources/app/app/data.json', {
+fs.readFile('./app/data.json', {
 	encoding: 'UTF-8'
 }, function(err, data) {
 	if (err) throw err;
 	todoData = JSON.parse(data);
 	renderList();
+});
+
+fs.readFile('./app/history.json',{
+	encoding:'UTF-8'
+},function(err,data){
+	if(err){
+		throw err;
+	}
+	historyData = JSON.parse(data);
 })
 
 function renderList() {
@@ -108,10 +118,17 @@ list.addEventListener('click', function(e) {
 	}
 
 	if (index > -1) {
-		todoData.splice(index, 1);
-		fs.writeFile('./resources/app/app/data.json', JSON.stringify(todoData), function(err, data) {
+		var doneItem = todoData.splice(index, 1)[0];
+		doneItem.timestamp = new Date();
+		historyData.push(doneItem);
+		fs.writeFile('./app/data.json', JSON.stringify(todoData), function(err, data) {
 			if (err) throw err;
-			list.removeChild(e.target.parentNode);
+			fs.writeFile('./app/history.json',JSON.stringify(historyData),function(err,data){
+				if(err){
+					throw err;
+				}
+				list.removeChild(e.target.parentNode);		
+			})
 		})
 	}
 }, false)
@@ -173,7 +190,7 @@ addArea.addEventListener('click', function(e) {
 
 				todoData.sort(keysort('priority'));
 
-				fs.writeFile('./resources/app/app/data.json', JSON.stringify(todoData), function(err, data) {
+				fs.writeFile('./app/data.json', JSON.stringify(todoData), function(err, data) {
 					if (err) throw err;
 					for (let i = 0, len = addAreaCircle.length; i < len; i++) {
 						addAreaCircle[i].className = addAreaCircle[i].className.replace('selected', '');
