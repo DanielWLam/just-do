@@ -190,9 +190,20 @@ i.icon.green{
 	z-index: 110;
 	left:-360px;
 	top:0;
-	overflow-y: scroll;
 	transition:left .5s ease-out;
 	-webkit-app-region:no-drag;
+	overflow-y: hidden;
+}
+.history-list h1{
+	font-size: 16px;
+	font-weight: lighter;
+	margin-top: 10px;
+	margin-left: 15px;
+	font-family: 'Microsoft Yahei';
+}
+.history-list ul{
+	overflow-y: scroll;
+	height:655px;
 }
 .history-list li{
 	display:block;
