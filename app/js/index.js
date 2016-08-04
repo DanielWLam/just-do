@@ -102,7 +102,7 @@ controlbar.addEventListener('click', function(e) {
 	if (firstClick) {
 		for (let i = 0, len = allItem.length; i < len; i++) {
 			allItem[i].style.display = 'none';
-			if (allItem[i].className.indexOf('item ' + priority) > -1) {
+			if (allItem[i].className.indexOf(priority) > -1) {
 				allItem[i].style.display = 'block';
 			}
 		}
@@ -204,7 +204,19 @@ addArea.addEventListener('click', function(e) {
 					tmpNode.className = 'item fadeInDown animated pri'+ selectedPri;
 					tmpNode.innerHTML = '<i class="circle thin icon '+priColorMap[selectedPri]+'"></i>' + input.value.trim();
 					var referenceNode = list.querySelectorAll('.item')[lastIndex];
-					list.insertBefore(tmpNode,referenceNode ? referenceNode.nextSibling : referenceNode);
+					var refePri = '';
+					if(referenceNode){
+						refePri = /pri(\w)/.exec(referenceNode.className)[1];
+					}
+					//如果refernceNode的pri比要插入的小，应该用insertBefore
+					if(refePri > selectedPri){
+						list.insertBefore(tmpNode,referenceNode);
+					}else{
+					//否则用insertAfter
+					//模拟insertAfter
+						list.insertBefore(tmpNode,referenceNode ? referenceNode.nextSibling : referenceNode);
+					}
+					
 
 					input.value = '';
 					addBg.className += ' fn-hide';
@@ -276,7 +288,7 @@ historyBtn.addEventListener('click',function(){
 })
 
 document.body.addEventListener('click',function(e){
-	if(e.target.offsetParent.className != 'history-list' && e.target.className != 'history-list'){
+	if(e.target.offsetParent && e.target.offsetParent.className != 'history-list' && e.target.className != 'history-list'){
 		if(historyList.offsetLeft===0){
 			historyList.style.left = '-360px'
 		}
